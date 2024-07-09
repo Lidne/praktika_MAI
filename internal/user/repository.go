@@ -1,4 +1,4 @@
-package product
+package user
 
 import (
 	"context"
@@ -6,11 +6,11 @@ import (
 	"github.com/Lidne/praktika_MAI/internal/models"
 )
 
-// UserRepository Product
+// UserRepository Sell
 type UserRepository interface {
-	Create(ctx context.Context, product *models.Product) error
-	Update(ctx context.Context, product *models.Product) error
-	GetByID(ctx context.Context, id int) (*models.Product, error)
-	FindAll(ctx context.Context) ([]models.Product, error)
+	Create(ctx context.Context, product *models.User) error
+	Update(ctx context.Context, product *models.User) error
+	GetByID(ctx context.Context, id string) (*models.User, error)
+	FindAll(ctx context.Context) ([]models.User, error)
 	Delete(ctx context.Context, id int) error
 }

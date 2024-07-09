@@ -39,7 +39,7 @@ func (r *productRepo) Update(ctx context.Context, product *models.Product) error
 	return nil
 }
 
-func (r *productRepo) GetByID(ctx context.Context, id int) (*models.Product, error) {
+func (r *productRepo) GetByID(ctx context.Context, id string) (*models.Product, error) {
 	q := `SELECT id, name, price, updatedat FROM products WHERE id=$1`
 	product := &models.Product{}
 	if err := r.client.QueryRow(ctx, q, id).Scan(&product.ID, &product.Name, &product.Price, &product.CreatedAt); err != nil {
