@@ -1,212 +1,50 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "Statistics microservice",
+        "title": "Stats microservice",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
     },
+    "host": "localhost:5007",
+    "basePath": "/api/",
     "paths": {
-        "/products": {
-            "post": {
-                "description": "Create new single product",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Products"
-                ],
-                "summary": "Create new product",
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/models.Product"
-                        }
-                    }
-                }
-            }
-        },
-        "/products/search": {
+        "/api/statistics/users": {
             "get": {
-                "description": "Search product by name or description",
-                "consumes": [
-                    "application/json"
-                ],
+                "description": "Retrieve a list of users",
                 "produces": [
                     "application/json"
                 ],
-                "tags": [
-                    "Products"
-                ],
-                "summary": "Search product",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "search text",
-                        "name": "search",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "page number",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "number of elements",
-                        "name": "size",
-                        "in": "query"
-                    }
-                ],
+                "summary": "Get users",
+                "operationId": "get-users",
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "List of users",
                         "schema": {
-                            "$ref": "#/definitions/models.ProductsList"
-                        }
-                    }
-                }
-            }
-        },
-        "/products/{product_id}": {
-            "get": {
-                "description": "Get single product by id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Products"
-                ],
-                "summary": "Get product by id",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "product id",
-                        "name": "product_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Product"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "Update single product by id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Products"
-                ],
-                "summary": "Update single product",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "product id",
-                        "name": "product_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Product"
+                            "type": "object",
+                            "additionalProperties": true
                         }
                     }
                 }
             }
         }
     },
-    "definitions": {
-        "models.Product": {
-            "type": "object",
-            "required": [
-                "description",
-                "name",
-                "price",
-                "quantity",
-                "rating"
-            ],
-            "properties": {
-                "CategoryId": {
-                    "type": "string"
-                },
-                "createdAt": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "imageUrl": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "photos": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "price": {
-                    "type": "number"
-                },
-                "productId": {
-                    "type": "string"
-                },
-                "quantity": {
-                    "type": "integer"
-                },
-                "rating": {
-                    "type": "integer"
-                },
-                "updatedAt": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.ProductsList": {
-            "type": "object",
-            "properties": {
-                "hasMore": {
-                    "type": "boolean"
-                },
-                "page": {
-                    "type": "integer"
-                },
-                "products": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.Product"
-                    }
-                },
-                "size": {
-                    "type": "integer"
-                },
-                "totalCount": {
-                    "type": "integer"
-                },
-                "totalPages": {
-                    "type": "integer"
-                }
-            }
+    "securityDefinitions": {
+        "BasicAuth": {
+            "type": "basic"
         }
+    },
+    "externalDocs": {
+        "description": "OpenAPI",
+        "url": "https://swagger.io/resources/open-api/"
     }
 }

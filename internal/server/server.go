@@ -2,20 +2,14 @@ package server
 
 import (
 	"context"
-	"github.com/AleksK1NG/products-microservice/config"
-	"github.com/AleksK1NG/products-microservice/internal/middlewares"
-	productsHttpV1 "github.com/AleksK1NG/products-microservice/internal/product/delivery/http/v1"
-	"github.com/AleksK1NG/products-microservice/internal/product/delivery/kafka"
-	"github.com/AleksK1NG/products-microservice/internal/product/repository"
-	"github.com/AleksK1NG/products-microservice/internal/product/usecase"
-	"github.com/AleksK1NG/products-microservice/pkg/logger"
-	"github.com/go-playground/validator/v10"
-	"github.com/go-redis/redis/v8"
+	"github.com/Lidne/praktika_MAI/config"
+	productRepo "github.com/Lidne/praktika_MAI/internal/product/repository"
+	"github.com/Lidne/praktika_MAI/pkg/logger"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/labstack/echo/v4"
 	"github.com/opentracing/opentracing-go"
 	"github.com/pkg/errors"
-	"net"
+	echoSwagger "github.com/swaggo/echo-swagger"
 	"os"
 	"os/signal"
 	"syscall"
@@ -32,17 +26,20 @@ const (
 
 // server
 type server struct {
-	log    logger.Logger
-	cfg    *config.Config
-	tracer opentracing.Tracer
-	dbpool *pgxpool.Pool
-	echo   *echo.Echo
-	redis  *redis.Client
+	log      logger.Logger
+	cfg      *config.Config
+	tracer   opentracing.Tracer
+	dbclient *pgxpool.Pool
+	echo     *echo.Echo
+}
+
+type Services struct {
+	user:
 }
 
 // NewServer constructor
-func NewServer(log logger.Logger, cfg *config.Config, tracer opentracing.Tracer, db *pgxpool.Pool, redis *redis.Client) *server {
-	return &server{log: log, cfg: cfg, tracer: tracer, dbpool: db, echo: echo.New(), redis: redis}
+func NewServer(log logger.Logger, cfg *config.Config, tracer opentracing.Tracer, db *pgxpool.Pool) *server {
+	return &server{log: log, cfg: cfg, tracer: tracer, dbclient: db, echo: echo.New()}
 }
 
 // Run Start server
@@ -50,24 +47,34 @@ func (s *server) Run() error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	validate := validator.New()
+	//validate := validator.New()
 
-	productsProducer := kafka.NewProductsProducer(s.log, s.cfg)
+	/*productsProducer := kafka.NewProductsProducer(s.log, s.cfg)
 	productsProducer.Run()
-	defer productsProducer.Close()
+	defer productsProducer.Close()*/
 
-	productPostgresRepo := repository.NewProductPostgresRepo(s.dbpool)
-	productRedisRepo := repository.NewProductRedisRepository(s.redis)
-	productUC := usecase.NewProductUC(productPostgresRepo, productRedisRepo, s.log, productsProducer)
+	postgresRepo := productRepo.NewProductRepo(s.dbclient)
+	if postgresRepo == nil {
+		s.log.Fatal("failed to connect to postgres")
+	}
+
+	/*pr := models.Product{Name: "jopa", Price: 51235}
+	err1 := postgresRepo.Create(ctx, &pr)
+	if err1 != nil {
+		s.log.Fatal("failed to create product", err1)
+	}*/
+	api := s.echo.Group("/api")
+
+	s.echo.GET("/swagger/*", echoSwagger.WrapHandler)
 
 	//im := interceptors.NewInterceptorManager(s.log, s.cfg)
-	mw := middlewares.NewMiddlewareManager(s.log, s.cfg)
+	//mw := middlewares.NewMiddlewareManager(s.log, s.cfg)
 
-	l, err := net.Listen("tcp", s.cfg.Server.Port)
+	/*l, err := net.Listen("tcp", s.cfg.Server.Port)
 	if err != nil {
 		return errors.Wrap(err, "net.Listen")
 	}
-	defer l.Close()
+	defer l.Close()*/
 
 	/*cert, err := tls.LoadX509KeyPair(certFile, keyFile)
 	if err != nil {
@@ -95,7 +102,7 @@ func (s *server) Run() error {
 	productsService.RegisterProductsServiceServer(grpcServer, productService)
 	grpc_prometheus.Register(grpcServer)*/
 
-	v1 := s.echo.Group("/api/v1")
+	/*v1 := s.echo.Group("/api/v1")
 	v1.Use(mw.Metrics)
 
 	productHandlers := productsHttpV1.NewProductHandlers(s.log, productUC, validate, v1.Group("/products"), mw)
@@ -107,7 +114,7 @@ func (s *server) Run() error {
 	go func() {
 		s.log.Infof("Server is listening on PORT: %s", s.cfg.Http.Port)
 		s.runHttpServer()
-	}()
+	}()*/
 
 	/*go func() {
 		s.log.Infof("GRPC Server is listening on port: %s", s.cfg.Server.Port)
@@ -127,7 +134,10 @@ func (s *server) Run() error {
 			cancel()
 		}
 	}()*/
-
+	if err := s.echo.Start(s.cfg.Http.Port); err != nil {
+		s.log.Error(err)
+		cancel()
+	}
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
 

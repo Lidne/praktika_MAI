@@ -6,8 +6,8 @@ import (
 	"github.com/Lidne/praktika_MAI/internal/models"
 )
 
-// ProductRepository Product
-type ProductRepository interface {
+// UserRepository Product
+type UserRepository interface {
 	Create(ctx context.Context, product *models.Product) error
 	Update(ctx context.Context, product *models.Product) error
 	GetByID(ctx context.Context, id int) (*models.Product, error)

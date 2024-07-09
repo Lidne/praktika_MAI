@@ -20,7 +20,7 @@ type Config struct {
 	Logger     Logger
 	Jaeger     Jaeger
 	Metrics    Metrics
-	MongoDB    MongoDB
+	Postgres   Postgres
 	Kafka      Kafka
 	Http       Http
 	Redis      Redis
@@ -70,10 +70,11 @@ type Jaeger struct {
 	LogSpans    bool
 }
 
-type MongoDB struct {
-	URI      string
+type Postgres struct {
+	Host     string
 	User     string
 	Password string
+	Port     string
 	DB       string
 }
 

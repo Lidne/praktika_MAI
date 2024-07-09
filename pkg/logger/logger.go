@@ -6,7 +6,7 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 
-	"github.com/AleksK1NG/products-microservice/config"
+	"github.com/Lidne/praktika_MAI/config"
 )
 
 // Logger methods interface

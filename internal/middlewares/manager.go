@@ -5,8 +5,8 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 
-	"github.com/AleksK1NG/products-microservice/config"
-	"github.com/AleksK1NG/products-microservice/pkg/logger"
+	"github.com/Lidne/praktika_MAI/config"
+	"github.com/Lidne/praktika_MAI/pkg/logger"
 )
 
 var (

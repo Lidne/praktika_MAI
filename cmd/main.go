@@ -2,35 +2,46 @@ package main
 
 import (
 	"context"
+	"github.com/Lidne/praktika_MAI/config"
+	_ "github.com/Lidne/praktika_MAI/docs"
+	"github.com/Lidne/praktika_MAI/internal/server"
+	"github.com/Lidne/praktika_MAI/pkg/jaeger"
+	"github.com/Lidne/praktika_MAI/pkg/kafka"
+	"github.com/Lidne/praktika_MAI/pkg/logger"
+	"github.com/Lidne/praktika_MAI/pkg/postgres"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"log"
-	"os"
-
 	"github.com/opentracing/opentracing-go"
-
-	"github.com/AleksK1NG/products-microservice/config"
-	"github.com/AleksK1NG/products-microservice/internal/server"
-	"github.com/AleksK1NG/products-microservice/pkg/jaeger"
-	"github.com/AleksK1NG/products-microservice/pkg/kafka"
-	"github.com/AleksK1NG/products-microservice/pkg/logger"
-	"github.com/AleksK1NG/products-microservice/pkg/redis"
+	"log"
 )
 
-// @title Products microservice
-// @version 1.0
-// @description Products REST API
-// @termsOfService http://swagger.io/terms/
+type App struct {
+	pool *pgxpool.Pool
+	ctx  context.Context
+}
 
-// @contact.name Alexander Bryksin
-// @contact.url https://github.com/AleksK1NG
-// @contact.email alexander.bryksin@yandex.ru
+func NewApp(pool *pgxpool.Pool) *App {
+	return &App{pool: pool, ctx: context.Background()}
+}
 
-// @license.name Apache 2.0
-// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+// @title           Stats microservice
+// @version         1.0
+// @description     Statistics microservice
+// @termsOfService  http://swagger.io/terms/
 
-// @host localhost:5007
-// @BasePath /api/v1
+// @contact.name   API Support
+// @contact.url    http://www.swagger.io/support
+// @contact.email  support@swagger.io
 
+// @license.name  Apache 2.0
+// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host      localhost:5007
+// @BasePath  /api/
+
+// @securityDefinitions.basic  BasicAuth
+
+// @externalDocs.description  OpenAPI
+// @externalDocs.url          https://swagger.io/resources/open-api/
 func main() {
 	log.Println("Starting products microservice")
 	ctx, cancel := context.WithCancel(context.Background())
@@ -61,12 +72,8 @@ func main() {
 	defer closer.Close()
 	appLogger.Info("Opentracing connected")
 
-	dbpool, err := pgxpool.New(ctx, os.Getenv("DB_URL"))
-	if pingErr := dbpool.Ping(ctx); err != nil || pingErr != nil {
-		appLogger.Fatal("cannot connect mongodb", err)
-	}
+	dbpool, err := postgres.NewClient(ctx, cfg)
 	defer dbpool.Close()
-
 	appLogger.Info("PostgreSQL connected")
 
 	conn, err := kafka.NewKafkaConn(cfg)
@@ -80,9 +87,6 @@ func main() {
 	}
 	appLogger.Infof("Kafka connected: %v", brokers)
 
-	redisClient := redis.NewRedisClient(cfg)
-	appLogger.Info("Redis connected")
-
-	s := server.NewServer(appLogger, cfg, tracer, dbpool, redisClient)
+	s := server.NewServer(appLogger, cfg, tracer, dbpool)
 	appLogger.Fatal(s.Run())
 }

@@ -39,11 +39,12 @@ Jaeger:
   ServiceName: products_microservice
   LogSpans: false
 
-MongoDB:
-  URI: "mongodb://localhost:27017"
-  User: "admin"
-  Password: "admin"
-  DB: "products"
+Postgres:
+  Host: "localhost"
+  Port: "8080"
+  User: "postgres"
+  Password: "postgres"
+  DB: "postgres"
 
 Redis:
   RedisAddr: localhost:6379

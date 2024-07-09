@@ -5,7 +5,7 @@ import (
 
 	"github.com/segmentio/kafka-go"
 
-	"github.com/AleksK1NG/products-microservice/config"
+	"github.com/Lidne/praktika_MAI/config"
 )
 
 func NewKafkaConn(cfg *config.Config) (*kafka.Conn, error) {

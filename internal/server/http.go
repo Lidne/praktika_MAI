@@ -10,7 +10,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	echoSwagger "github.com/swaggo/echo-swagger"
 
-	"github.com/AleksK1NG/products-microservice/docs"
+	"github.com/Lidne/praktika_MAI/docs"
 )
 
 func (s *server) runHttpServer() {
