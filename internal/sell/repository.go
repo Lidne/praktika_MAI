@@ -2,7 +2,6 @@ package sell
 
 import (
 	"context"
-
 	"github.com/Lidne/praktika_MAI/internal/models"
 )
 
@@ -13,4 +12,5 @@ type SellRepository interface {
 	GetByID(ctx context.Context, id string) (*models.Sell, error)
 	FindAll(ctx context.Context) ([]models.Sell, error)
 	Delete(ctx context.Context, id int) error
+	SelectByTime(ctx context.Context, time string) ([]models.Sell, error)
 }

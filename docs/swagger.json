@@ -1,0 +1,274 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/api/products": {
+            "get": {
+                "description": "Get all products",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Get Products",
+                "operationId": "get-products",
+                "responses": {
+                    "200": {
+                        "description": "data",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/api/products/{id}": {
+            "get": {
+                "description": "Get a product by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Get Product By ID",
+                "operationId": "get-product-by-id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "data",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/api/sales": {
+            "get": {
+                "description": "Get all sales",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Sales"
+                ],
+                "summary": "Get Sales",
+                "operationId": "get-sales",
+                "responses": {
+                    "200": {
+                        "description": "data",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/api/sales/{id}": {
+            "get": {
+                "description": "Get a sale by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Sales"
+                ],
+                "summary": "Get Sale By ID",
+                "operationId": "get-sale-by-id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Sale ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "data",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users": {
+            "get": {
+                "description": "Get all users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get Users",
+                "operationId": "get-users",
+                "responses": {
+                    "200": {
+                        "description": "data",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/{id}": {
+            "get": {
+                "description": "Get a user by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get User By ID",
+                "operationId": "get-user-by-id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "data",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/sales/interval": {
+            "get": {
+                "description": "Get sales data filtered by a time interval",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Sales"
+                ],
+                "summary": "Get Sales by Interval",
+                "operationId": "get-sales-date",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Time Interval",
+                        "name": "interval",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "data",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "bad request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

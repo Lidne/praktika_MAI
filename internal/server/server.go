@@ -75,6 +75,7 @@ func (s *server) Run() error {
 	api.GET("/products/:id", services.getProductById)
 	api.GET("/sales", services.getSales)
 	api.GET("/sales/:id", services.getSellById)
+	api.GET("/sales/interval", services.getSalesDate)
 
 	s.echo.GET("/swagger/*", echoSwagger.WrapHandler)
 
@@ -105,21 +106,17 @@ func (s *server) Run() error {
 	return nil
 }
 
-// getUserInfo godoc
+// getUsers godoc
 //
-//	@Summary		Get User Info
-//
-//	@Security		ApiKeyAuth
-//
-//	@Tags			Account
-//	@Description	Get User Info
-//	@ID				get-user-info
+//	@Summary		Get Users
+//	@Tags			Users
+//	@Description	Get all users
+//	@ID				get-users
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{object}	SuccessResponse
-//	@Failure		401	{object}	ErrorResponse
-//	@Failure		500	{object}	ErrorResponse
-//	@Router			/account/info [get]
+//	@Success		200	{object}	map[string]interface{}	"data"
+//	@Failure		500	{object}	map[string]interface{}	"error"
+//	@Router			/api/users [get]
 func (s *Services) getUsers(c echo.Context) error {
 	usrs, err := s.user.FindAll(s.ctx)
 	if err != nil {
@@ -144,21 +141,18 @@ func (s *Services) getUsers(c echo.Context) error {
 	})
 }
 
-// getUserInfo godoc
+// getUserById godoc
 //
-//	@Summary		Get User Info
-//
-//	@Security		ApiKeyAuth
-//
-//	@Tags			Account
-//	@Description	Get User Info
-//	@ID				get-user-info
+//	@Summary		Get User By ID
+//	@Tags			Users
+//	@Description	Get a user by ID
+//	@ID				get-user-by-id
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{object}	SuccessResponse
-//	@Failure		401	{object}	ErrorResponse
-//	@Failure		500	{object}	ErrorResponse
-//	@Router			/api/users/ [get]
+//	@Param			id	path	string	true	"User ID"
+//	@Success		200	{object}	map[string]interface{}	"data"
+//	@Failure		500	{object}	map[string]interface{}	"error"
+//	@Router			/api/users/{id} [get]
 func (s *Services) getUserById(c echo.Context) error {
 	userId := c.Param("id")
 	usr, err := s.user.GetByID(s.ctx, userId)
@@ -180,13 +174,17 @@ func (s *Services) getUserById(c echo.Context) error {
 	})
 }
 
-// @Summary Get Sales
-// @Description Get all sales
-// @Tags sales
-// @Produce json
-// @Success 200 {object} map[string]interface{} "data"
-// @Failure 500 {object} map[string]interface{} "error"
-// @Router /sales [get]
+// getSales godoc
+//
+//	@Summary		Get Sales
+//	@Tags			Sales
+//	@Description	Get all sales
+//	@ID				get-sales
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	map[string]interface{}	"data"
+//	@Failure		500	{object}	map[string]interface{}	"error"
+//	@Router			/api/sales [get]
 func (s *Services) getSales(c echo.Context) error {
 	slls, err := s.sell.FindAll(s.ctx)
 	if err != nil {
@@ -209,14 +207,18 @@ func (s *Services) getSales(c echo.Context) error {
 	})
 }
 
-// @Summary Get Sale By ID
-// @Description Get a sale by ID
-// @Tags sales
-// @Produce json
-// @Param id path string true "Sale ID"
-// @Success 200 {object} map[string]interface{} "data"
-// @Failure 500 {object} map[string]interface{} "error"
-// @Router /sales/{id} [get]
+// getSellById godoc
+//
+//	@Summary		Get Sale By ID
+//	@Tags			Sales
+//	@Description	Get a sale by ID
+//	@ID				get-sale-by-id
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path	string	true	"Sale ID"
+//	@Success		200	{object}	map[string]interface{}	"data"
+//	@Failure		500	{object}	map[string]interface{}	"error"
+//	@Router			/api/sales/{id} [get]
 func (s *Services) getSellById(c echo.Context) error {
 	sellId := c.Param("id")
 	sll, err := s.sell.GetByID(s.ctx, sellId)
@@ -236,13 +238,17 @@ func (s *Services) getSellById(c echo.Context) error {
 	})
 }
 
-// @Summary Get Products
-// @Description Get all products
-// @Tags products
-// @Produce json
-// @Success 200 {object} map[string]interface{} "data"
-// @Failure 500 {object} map[string]interface{} "error"
-// @Router /products [get]
+// getProducts godoc
+//
+//	@Summary		Get Products
+//	@Tags			Products
+//	@Description	Get all products
+//	@ID				get-products
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	map[string]interface{}	"data"
+//	@Failure		500	{object}	map[string]interface{}	"error"
+//	@Router			/api/products [get]
 func (s *Services) getProducts(c echo.Context) error {
 	products, err := s.product.FindAll(s.ctx)
 	if err != nil {
@@ -265,14 +271,18 @@ func (s *Services) getProducts(c echo.Context) error {
 	})
 }
 
-// @Summary Get Product By ID
-// @Description Get a product by ID
-// @Tags products
-// @Produce json
-// @Param id path string true "Product ID"
-// @Success 200 {object} map[string]interface{} "data"
-// @Failure 500 {object} map[string]interface{} "error"
-// @Router /products/{id} [get]
+// getProductById godoc
+//
+//	@Summary		Get Product By ID
+//	@Tags			Products
+//	@Description	Get a product by ID
+//	@ID				get-product-by-id
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path	string	true	"Product ID"
+//	@Success		200	{object}	map[string]interface{}	"data"
+//	@Failure		500	{object}	map[string]interface{}	"error"
+//	@Router			/api/products/{id} [get]
 func (s *Services) getProductById(c echo.Context) error {
 	productId := c.Param("id")
 	product, err := s.product.GetByID(s.ctx, productId)
@@ -289,5 +299,50 @@ func (s *Services) getProductById(c echo.Context) error {
 			"name":       product.Name,
 			"price":      product.Price,
 		},
+	})
+}
+
+type Interval struct {
+	interval string `query:"interval"`
+}
+
+// getSalesDate godoc
+//
+//	@Summary		Get Sales by Interval
+//	@Tags			Sales
+//	@Description	Get sales data filtered by a time interval
+//	@ID				get-sales-date
+//	@Accept			json
+//	@Produce		json
+//	@Param			interval	query	string	true	"Time Interval"
+//	@Success		200	{object}	map[string]interface{}	"data"
+//	@Failure		400	{string}	string	"bad request"
+//	@Failure		500	{object}	map[string]interface{}	"error"
+//	@Router			/sales/interval [get]
+func (s *Services) getSalesDate(c echo.Context) error {
+	var interval Interval
+	err := c.Bind(&interval)
+	if err != nil {
+		return c.String(http.StatusBadRequest, "bad request")
+	}
+
+	slls, err := s.sell.SelectByTime(s.ctx, interval.interval)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, echo.Map{
+			"message": "failed to get sales",
+			"err":     err,
+		})
+	}
+	res := []echo.Map{}
+	for _, sll := range slls {
+		res = append(res, echo.Map{
+			"id":         sll.ID,
+			"updated_at": sll.UpdatedAt,
+			"user_id":    sll.UserId,
+			"product_id": sll.ProductId,
+		})
+	}
+	return c.JSON(http.StatusOK, echo.Map{
+		"data": res,
 	})
 }

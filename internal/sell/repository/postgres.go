@@ -79,3 +79,25 @@ func (r *sellRepo) Delete(ctx context.Context, id int) error {
 	}
 	return nil
 }
+
+func (r *sellRepo) SelectByTime(ctx context.Context, time string) ([]models.Sell, error) {
+	q := `SELECT * FROM bargains WHERE updatedat >= NOW() - INTERVAL $1`
+	rows, err := r.client.Query(ctx, q, time)
+	if err != nil {
+		fmt.Errorf("SQL Error. Failed to find all sells: %s", err.Error())
+		return nil, err
+	}
+	defer rows.Close()
+
+	sells := []models.Sell{}
+	for rows.Next() {
+		sell := models.Sell{}
+		if err := rows.Scan(&sell.ID, &sell.UserId, &sell.ProductId, &sell.UpdatedAt); err != nil {
+			fmt.Errorf("SQL Error. Failed to scan sell: %s", err.Error())
+			return nil, err
+		}
+		sells = append(sells, sell)
+	}
+
+	return sells, nil
+}
